@@ -158,7 +158,7 @@ export const BusinessForm: React.FC<BusinessFormProps> = ({
           </div>
           
           {/* Tone Selection */}
-          <div className="space-y-2">
+          <div className="space-y-2 mb-8">
             <Label htmlFor="tone" className="text-sm font-medium">
               Chatbot Tone *
             </Label>
@@ -172,10 +172,16 @@ export const BusinessForm: React.FC<BusinessFormProps> = ({
               )}>
                 <SelectValue placeholder="Select chatbot tone" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="friendly">Friendly - Warm and welcoming</SelectItem>
-                <SelectItem value="professional">Professional - Formal and business-like</SelectItem>
-                <SelectItem value="casual">Casual - Relaxed and conversational</SelectItem>
+              <SelectContent className="bg-white border border-border shadow-lg z-50">
+                <SelectItem value="friendly" className="bg-white hover:bg-muted cursor-pointer">
+                  Friendly - Warm and welcoming
+                </SelectItem>
+                <SelectItem value="professional" className="bg-white hover:bg-muted cursor-pointer">
+                  Professional - Formal and business-like
+                </SelectItem>
+                <SelectItem value="casual" className="bg-white hover:bg-muted cursor-pointer">
+                  Casual - Relaxed and conversational
+                </SelectItem>
               </SelectContent>
             </Select>
             {getError('tone') && (
