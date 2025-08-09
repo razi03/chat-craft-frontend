@@ -91,3 +91,42 @@ export const parseFaqText = (text: string): Array<{ q: string; a: string }> => {
 export const formatFaqsForDisplay = (faqs: Array<{ q: string; a: string }>): string => {
   return faqs.map(faq => `Q: ${faq.q}\nA: ${faq.a}`).join('\n\n')
 }
+
+// File validation functions
+export const validateFile = (file: File): { isValid: boolean; error?: string } => {
+  const maxSize = 10 * 1024 * 1024 // 10MB
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'text/plain'
+  ]
+  
+  if (file.size > maxSize) {
+    return { isValid: false, error: 'File size must be less than 10MB' }
+  }
+  
+  if (!allowedTypes.includes(file.type)) {
+    return { isValid: false, error: 'Only PDF, Word (.doc, .docx), and text files are allowed' }
+  }
+  
+  return { isValid: true }
+}
+
+export const validateFiles = (files: File[]): { isValid: boolean; errors: string[] } => {
+  const maxFiles = 5
+  const errors: string[] = []
+  
+  if (files.length > maxFiles) {
+    errors.push(`Maximum ${maxFiles} files allowed`)
+  }
+  
+  files.forEach((file, index) => {
+    const validation = validateFile(file)
+    if (!validation.isValid) {
+      errors.push(`File ${index + 1} (${file.name}): ${validation.error}`)
+    }
+  })
+  
+  return { isValid: errors.length === 0, errors }
+}

@@ -45,6 +45,23 @@ A complete React frontend for creating and embedding AI-powered chatbots on webs
    npm run preview  # Preview the production build
    ```
 
+## 🌟 Key Features
+
+### Core Functionality
+- 🤖 **AI Chatbot Creation** - Transform business info + FAQs into intelligent chatbots
+- 📄 **Knowledge Base Upload** - Upload PDF, Word docs, text files to enhance chatbot responses  
+- 🎨 **Tone Customization** - Choose friendly, professional, or casual chatbot personality
+- 📋 **Easy Embed Code** - One-line script tag works on any website
+- 📱 **Responsive Widget** - Perfect on desktop, tablet, and mobile devices
+- 🔄 **Live Demo** - Test your chatbot before deployment
+- ⚡ **Fast & Lightweight** - Optimized performance with zero external dependencies
+
+### Form Features
+- ✅ **Business Information** - Name, description, website, tone selection
+- 📝 **FAQ Management** - Support for text format or JSON input
+- 📄 **File Upload** - Drag & drop PDF/Word documents with validation
+- 🔍 **Real-time Validation** - Instant feedback and error handling
+- 💾 **File Management** - Preview, remove, and organize uploaded documents
 ## 📁 Project Structure
 
 ```
@@ -55,7 +72,9 @@ chatbot-generator-frontend/
 │   │   ├── Layout.tsx      # Main layout wrapper
 │   │   ├── BusinessForm.tsx # Chatbot creation form
 │   │   ├── EmbedCodeCard.tsx # Shows embed code & preview
-│   │   └── WidgetPreview.tsx # Widget demo component
+│   │   ├── WidgetPreview.tsx # Widget demo component
+│   │   ├── FileUpload.tsx  # File upload with drag & drop
+│   │   └── LoadingSpinner.tsx # Loading states
 │   ├── pages/              # Route components
 │   │   ├── CreateBotPage.tsx # Main chatbot creation page
 │   │   ├── DemoEmbedHost.tsx # Widget demo page
@@ -90,8 +109,9 @@ The frontend integrates with these FastAPI endpoints:
 #### 1. Create Chatbot
 ```http
 POST /chatbot/create
-Content-Type: application/json
+Content-Type: multipart/form-data (when files included) or application/json
 
+# JSON format (no files):
 {
   "name": "ABC Store Bot",
   "description": "We sell handmade soaps and organic skincare...",
@@ -102,6 +122,14 @@ Content-Type: application/json
     {"q":"Return policy?","a":"30 day returns on unused items."}
   ]
 }
+
+# FormData format (with files):
+name: "ABC Store Bot"
+description: "We sell handmade soaps..."
+website_url: "https://abcstore.com"
+tone: "friendly"
+faqs: '[{"q":"Do you ship internationally?","a":"Yes, we ship worldwide."}]'
+knowledge_files: [File1, File2] // PDF, Word, or text files
 ```
 
 **Response (201):**

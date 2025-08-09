@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import LoadingSpinner from './LoadingSpinner'
+import FileUpload from './FileUpload'
 import { validateBusinessForm, parseFaqText } from '@/utils/validators'
 import type { BusinessInfo, CreateChatbotRequest } from '@/types'
 import { cn } from '@/lib/utils'
@@ -27,6 +28,7 @@ export const BusinessForm: React.FC<BusinessFormProps> = ({
   error 
 }) => {
   const [faqText, setFaqText] = useState('')
+  const [knowledgeFiles, setKnowledgeFiles] = useState<File[]>([])
   const [localErrors, setLocalErrors] = useState<Record<string, string>>({})
   
   const {
@@ -63,7 +65,8 @@ export const BusinessForm: React.FC<BusinessFormProps> = ({
       description: data.description,
       website_url: data.website_url,
       tone: data.tone,
-      faqs: faqs
+      faqs: faqs,
+      knowledge_files: knowledgeFiles
     })
   }
   
@@ -217,6 +220,13 @@ A: Yes, we ship worldwide with tracking."
               <p className="text-sm text-destructive">{getError('faqs')}</p>
             )}
           </div>
+          
+          {/* Knowledge Files Upload */}
+          <FileUpload
+            files={knowledgeFiles}
+            onFilesChange={setKnowledgeFiles}
+            className="mb-6"
+          />
           
           {/* Bot Display Name (Optional) */}
           <div className="space-y-2">

@@ -11,11 +11,37 @@ import type {
 } from '@/types'
 
 /**
- * Create a new chatbot
+ * Create a new chatbot with optional file uploads
  */
 export const createChatbot = async (data: CreateChatbotRequest): Promise<CreateChatbotResponse> => {
-  const response = await apiClient.post<CreateChatbotResponse>('/chatbot/create', data)
-  return response.data
+  // Use FormData if files are included
+  if (data.knowledge_files && data.knowledge_files.length > 0) {
+    const formData = new FormData()
+    
+    // Add text fields
+    formData.append('name', data.name)
+    formData.append('description', data.description)
+    if (data.website_url) formData.append('website_url', data.website_url)
+    formData.append('tone', data.tone)
+    formData.append('faqs', JSON.stringify(data.faqs))
+    
+    // Add files
+    data.knowledge_files.forEach((file, index) => {
+      formData.append(`knowledge_files`, file)
+    })
+    
+    const response = await apiClient.post<CreateChatbotResponse>('/chatbot/create', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return response.data
+  } else {
+    // Use JSON for requests without files
+    const { knowledge_files, ...jsonData } = data
+    const response = await apiClient.post<CreateChatbotResponse>('/chatbot/create', jsonData)
+    return response.data
+  }
 }
 
 /**
@@ -39,12 +65,24 @@ export const mockCreateChatbot = async (data: CreateChatbotRequest): Promise<Cre
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 1500))
   
+  // Simulate file processing if files are included
+  if (data.knowledge_files && data.knowledge_files.length > 0) {
+    console.log(`📄 Mock: Processing ${data.knowledge_files.length} knowledge files:`)
+    data.knowledge_files.forEach(file => {
+      console.log(`  - ${file.name} (${(file.size / 1024).toFixed(1)}KB)`)
+    })
+  }
+  
   return {
     chatbot_id: `mock-${Date.now()}`,
     embed_script_url: `${window.location.origin}/widget.js`,
     created_at: new Date().toISOString(),
     config: {
-      ...data,
+      name: data.name,
+      description: data.description,
+      website_url: data.website_url,
+      tone: data.tone,
+      faqs: data.faqs,
       bot_display_name: data.name,
     }
   }

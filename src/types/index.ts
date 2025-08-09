@@ -9,6 +9,7 @@ export interface BusinessInfo {
   tone: 'friendly' | 'professional' | 'casual'
   faqs: FAQ[]
   bot_display_name?: string
+  knowledge_files?: File[]
 }
 
 export interface FAQ {
@@ -22,7 +23,9 @@ export interface CreateChatbotRequest {
   website_url?: string
   tone: 'friendly' | 'professional' | 'casual'
   faqs: FAQ[]
+  knowledge_files?: File[]
 }
+
 
 export interface CreateChatbotResponse {
   chatbot_id: string
@@ -82,4 +85,18 @@ export interface WidgetState {
   isLoading: boolean
   messages: ChatMessage[]
   inputValue: string
+}
+
+// File upload types
+export interface UploadedFile {
+  id: string
+  name: string
+  size: number
+  type: string
+  lastModified: number
+}
+
+export interface FileValidationResult {
+  isValid: boolean
+  error?: string
 }
