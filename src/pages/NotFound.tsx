@@ -1,27 +1,92 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+/**
+ * 404 Not Found page
+ */
+import React from 'react'
+import { Link } from 'react-router-dom'
+import Layout from '@/components/Layout'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
+const NotFound: React.FC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <Layout>
+      <div className="max-w-2xl mx-auto text-center">
+        <Card className="shadow-card">
+          <CardContent className="p-12">
+            <div className="space-y-6">
+              {/* 404 Icon */}
+              <div className="w-20 h-20 mx-auto rounded-full gradient-primary flex items-center justify-center">
+                <span className="text-3xl text-white">❓</span>
+              </div>
+              
+              {/* Error Message */}
+              <div className="space-y-3">
+                <h1 className="text-4xl font-bold text-foreground">404</h1>
+                <h2 className="text-xl font-semibold text-muted-foreground">
+                  Page Not Found
+                </h2>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Oops! The page you're looking for doesn't exist. 
+                  It might have been moved, deleted, or you entered the wrong URL.
+                </p>
+              </div>
+              
+              {/* Actions */}
+              <div className="space-y-4 pt-4">
+                <Button asChild className="gradient-primary hover:opacity-90 transition-smooth text-white">
+                  <Link to="/">
+                    🏠 Go Home
+                  </Link>
+                </Button>
+                
+                <div className="flex gap-4 justify-center">
+                  <Button asChild variant="outline" size="sm">
+                    <Link to="/demo">
+                      🔍 View Demo
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => window.history.back()}
+                  >
+                    ← Go Back
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Help Links */}
+              <div className="border-t pt-6">
+                <p className="text-sm text-muted-foreground mb-3">
+                  Need help? Try these popular pages:
+                </p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  <Link 
+                    to="/" 
+                    className="text-xs px-3 py-1 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-smooth"
+                  >
+                    Create Chatbot
+                  </Link>
+                  <Link 
+                    to="/demo" 
+                    className="text-xs px-3 py-1 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-smooth"
+                  >
+                    Widget Demo
+                  </Link>
+                  <a 
+                    href="#docs" 
+                    className="text-xs px-3 py-1 bg-muted rounded-full hover:bg-primary hover:text-primary-foreground transition-smooth"
+                  >
+                    Documentation
+                  </a>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
-  );
-};
+    </Layout>
+  )
+}
 
-export default NotFound;
+export default NotFound
